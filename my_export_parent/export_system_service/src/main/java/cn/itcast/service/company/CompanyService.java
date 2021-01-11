@@ -12,5 +12,25 @@ public interface CompanyService  {
     /**
      * 查询所有的企业
      * */
-    public List<Company> findAll();
+     List<Company> findAll();
+
+    /**
+     * 保存企业信息
+     * */
+    void save(Company company);
+
+    /**
+     * 修改企业信息
+     * */
+    void update(Company company);
+
+    /**
+     * 根据id查询企业信息
+     * */
+    Company findById(String id);
+
+    /**
+     * 根据id删除企业信息
+     * */
+    void deleteById(String id);
 }

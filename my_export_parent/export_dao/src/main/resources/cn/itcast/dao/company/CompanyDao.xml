@@ -35,4 +35,63 @@
         select * from ss_company
     </select>
 
+    <!--
+        保存企业信息
+        void save(Company company);
+    -->
+    <insert id="save">
+        insert into ss_company values(
+            #{id},
+            #{name},
+            #{expirationDate},
+            #{address},
+            #{licenseId},
+            #{representative},
+            #{phone},
+            #{companySize},
+            #{industry},
+            #{remarks},
+            #{state},
+            #{balance},
+            #{city}
+        )
+    </insert>
+
+    <!--
+        更新企业信息
+        void update(Company company);
+    -->
+    <update id="update">
+        update ss_company set
+            name=#{name},
+            expiration_date=#{expirationDate},
+            address=#{address},
+            license_id=#{licenseId},
+            representative=#{representative},
+            phone=#{phone},
+            company_size=#{companySize},
+            industry=#{industry},
+            remarks=#{remarks},
+            state=#{state},
+            balance=#{balance},
+            city=#{city}
+            where id = #{id}
+    </update>
+
+    <!--
+        根据id查询企业信息
+        Company findById(String id);
+    -->
+    <select id="findById" resultMap="BaseResultMap">
+        select * from ss_company where id = #{id}
+    </select>
+
+    <!--
+        根据企业删除id
+        void deleteById(String id);
+    -->
+    <select id="deleteById">
+        delete from ss_company where id = #{id}
+    </select>
+
 </mapper>
