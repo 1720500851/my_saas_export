@@ -3,6 +3,8 @@ package cn.itcast.service.company.impl;
 import cn.itcast.dao.company.CompanyDao;
 import cn.itcast.domain.company.Company;
 import cn.itcast.service.company.CompanyService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -68,4 +70,24 @@ public class CompanyServiceImpl implements CompanyService {
     public void deleteById(String id) {
         companyDao.deleteById(id);
     }
+
+    /**
+     * 分页查询所有的企业
+     *
+     * @param pageNum
+     * @param pageSize
+     */
+    @Override
+    public PageInfo<Company> FindByPage(Integer pageNum, Integer pageSize) {
+        // 设置当前页 与页面大小
+        PageHelper.startPage(pageNum,pageSize);
+        // 查询所有的企业
+        List<Company> list = companyDao.findAll();
+        //构建pageInfo进行分页
+        PageInfo<Company> pageInfo = new PageInfo<>(list);
+        return pageInfo;
+    }
+
+
+
 }

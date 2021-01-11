@@ -1,6 +1,7 @@
 package cn.itcast.service.company;
 
 import cn.itcast.domain.company.Company;
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
@@ -33,4 +34,9 @@ public interface CompanyService  {
      * 根据id删除企业信息
      * */
     void deleteById(String id);
+
+    /**
+     * 分页查询所有的企业
+     * */
+    PageInfo<Company> FindByPage(Integer pageNum, Integer pageSize);
 }
