@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- 处理事务管理-->
+
+    <!-- 包扫描-->
+    <context:component-scan base-package="cn.itcast.service"/>
+
+    <!-- 创建事务管理器-->
+    <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" id="transactionManager">
+        <!-- 配置数据源-->
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!--
+        配置事务的通知规则, 配置事务通知规则意义: 配置哪些方法需要事物, 哪些方法不需要事务
+        查询的方法不需要事物, 其他的方法需要事务, 所以查询的方法写在前面, 其他写在后面
+    -->
+    <tx:advice id="ad" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="find*" propagation="SUPPORTS"/>
+            <tx:method name="select*" propagation="SUPPORTS"/>  <!-- 支持-->
+            <tx:method name="get*" propagation="SUPPORTS"/>
+            <tx:method name="query*" propagation="SUPPORTS"/>
+            <tx:method name="*" propagation="REQUIRED"/>  <!-- 必须-->
+        </tx:attributes>
+    </tx:advice>
+    
+    <!--配置切面-->
+    <aop:config>
+        <!-- 配置切面表达式 切入点表达式=权限修饰符 返回值类型 包名.类型.方法名(形参列表) 异常 -->
+        <aop:pointcut id="pt" expression="execution(* cn.itcast.service.*.impl.*.*(..))"/>
+        <!-- 配置通知与切入点-->
+        <aop:advisor advice-ref="ad" pointcut-ref="pt"/>
+        
+    </aop:config>
+
+</beans>

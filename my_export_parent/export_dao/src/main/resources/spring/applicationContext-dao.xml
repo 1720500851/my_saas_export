@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 加载properties 的配置文件-->
+        <context:property-placeholder location="classpath:properties/druid.properties"/>
+
+        <!-- 创建连接池-->
+        <bean class="com.alibaba.druid.pool.DruidDataSource" id="dataSource">
+            <property name="username" value="${jdbc.username}"/>
+            <property name="password" value="${jdbc.password}"/>
+            <property name="url" value="${jdbc.url}"/>
+            <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        </bean>
+
+    <!-- 包扫描-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="cn.itcast.dao"/>
+    </bean>
+
+    <!-- 创建SqlSessionFactoryBean 对象, 这个对象的作用就是为接口创建动态代理对象-->
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="typeAliasesPackage" value="cn.itcast.domain"/>
+    </bean>
+
+
+
+</beans>
