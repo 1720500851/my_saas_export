@@ -92,7 +92,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    //pageInfo.list 属性(list属性相当于get方法)
+                    <%--//pageInfo.list 属性(list属性相当于get方法)--%>
                     <c:forEach items="${pageInfo.list}" var="item">
                     <tr>
                         <td><input name="ids" value="${item.id}" type="checkbox"></td>

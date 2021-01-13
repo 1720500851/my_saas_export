@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace名称空间，名称空间代表该xml文件映射是哪个接口-->
+<mapper namespace="cn.itcast.dao.system.DeptDao">
+
+    <resultMap id="BaseResultMap" type="cn.itcast.domain.system.Dept">
+        <id     property="id" column="dept_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="state" column="state"/>
+        <result property="companyId" column="company_id"/>
+        <result property="companyName" column="company_name"/>
+
+        <!--
+            如果一个属性是某个java类的对象, 需要使用association 标签
+            如果一个属性是一个集合类型的对象, 需要使用collection 标签
+             association 标签说明
+                property : 当前实体类的属性名
+                column :传递给调用的方法的实参
+                select : 调用的方法
+        -->
+        <association property="parent" column="parent_id" select="findById"/>
+
+
+    </resultMap>
+
+
+
+    <!--
+        查询所有的部门
+        List<Dept> findAll(String companyId);
+    -->
+    <select id="findAll" resultMap="BaseResultMap">
+        select * from pe_dept d where d.company_id = #{companyId}
+    </select>
+
+    <!--
+        根据id查询所有的部门
+        Dept findById(String id);
+    -->
+    <select id="findById" resultMap="BaseResultMap">
+        select * from pe_dept where dept_id = #{deptId}
+    </select>
+
+    <!--
+        保存部门信息:
+        void save(Dept dept);
+    -->
+    <insert id="save">
+        insert into pe_dept values(
+            #{id},
+            #{deptName},
+            <choose>
+                <when test="parent.id!=null and parent.id!=''">
+                    #{parent.id},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            #{state},
+            #{companyId},
+            #{companyName}
+        )
+    </insert>
+
+    <!--
+        修改部门信息:
+        void update(Dept dept);
+    -->
+    <update id="update">
+        update pe_dept set
+            dept_name=#{deptName},
+            <choose>
+                <when test="parent.id!=null and parent.id!=''">
+                    parent_id=#{parent.id},
+                </when>
+                <otherwise>
+                    parent_id = null,
+                </otherwise>
+            </choose>
+            state=#{state},
+            company_id=#{companyId},
+            company_name=#{companyName}
+        where dept_id = #{id}
+    </update>
+
+    <!--
+      根据id查询该部门id是否有子部门
+      int findByParamId(String id);
+    -->
+    <select id="findByParamId" resultType="int">
+        select count(*) from pe_dept d where d.parent_id = #{id}
+    </select>
+
+    <!--
+        根据部门id删除部门
+        void deleteById(String id);
+    -->
+    <delete id="deleteById">
+        delete from pe_dept where dept_id = #{id}
+    </delete>
+
+</mapper>

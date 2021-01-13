@@ -19,7 +19,20 @@
         var id = getCheckId()
         if(id) {
             if(confirm("你确认要删除此条记录吗？")) {
-                location.href="/system/dept/delete.do?id="+id;
+                // location.href="/system/dept/delete.do?id="+id;
+                $.ajax({
+                    url:"/system/dept/delete.do",
+                    data:{"id":id},
+                    type:"get",
+                    dataType:"json",
+                    success:function (resultMap) {
+                        if(resultMap.flag){
+                            // 成功, 刷新页面
+                            location.reload();
+                        }
+                        alert(resultMap.message);
+                    }
+                })
             }
         }else{
             alert("请勾选待处理的记录，且每次只能勾选一个")
@@ -86,7 +99,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${page.rows}" var="dept"  varStatus="st">
+                    <c:forEach items="${pageInfo.list}" var="dept"  varStatus="st">
                         <tr>
                             <td><input type="checkbox" name="id" value="${dept.id }"/></td>
                             <td>${st.count }</td>
